@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WireGuard Browser Tunnel</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Schicht 1: Home -->
+    <section id="layer-home" class="layer" data-layer="home">
+      <header class="hdr">
+        <h1>WireGuard</h1>
+        <span id="status-badge" class="badge badge-disconnected">getrennt</span>
+      </header>
+
+      <div id="killswitch-warning" class="warn hidden"></div>
+      <div id="home-error" class="err hidden"></div>
+
+      <div class="row">
+        <label class="toggle">
+          <input type="checkbox" id="conn-toggle">
+          <span>Verbindung</span>
+        </label>
+      </div>
+
+      <div class="row">
+        <label for="active-tunnel">Aktiver Tunnel</label>
+        <select id="active-tunnel"></select>
+      </div>
+
+      <div class="row btns">
+        <button id="btn-new-tunnel" type="button">Neuer Tunnel</button>
+        <button id="btn-settings" type="button">Einstellungen</button>
+      </div>
+    </section>
+
+    <!-- Schicht 2: Neuer Tunnel -->
+    <section id="layer-tunnel" class="layer hidden" data-layer="tunnel">
+      <header class="hdr">
+        <button class="back" data-goto="home" type="button">&larr;</button>
+        <h1>Neuer Tunnel</h1>
+      </header>
+      <div class="row btns">
+        <button id="btn-file-import" type="button">Datei importieren</button>
+        <input type="file" id="file-input" accept=".conf,text/plain" class="hidden">
+        <button id="btn-manual" type="button">Haendisch eingeben</button>
+      </div>
+      <div id="tunnel-msg" class="msg hidden"></div>
+    </section>
+
+    <!-- Schicht 3: Manuelle Anlage -->
+    <section id="layer-manual" class="layer hidden" data-layer="manual">
+      <header class="hdr">
+        <button class="back" data-goto="tunnel" type="button">&larr;</button>
+        <h1>Manuelle Anlage</h1>
+      </header>
+
+      <details class="accordion" open>
+        <summary>Formular</summary>
+        <form id="manual-form">
+          <label>Name <input type="text" name="name"></label>
+          <label>PrivateKey <input type="text" name="privateKey" data-validate="key"></label>
+          <label>Address (CIDR, Komma) <input type="text" name="address" data-validate="cidrlist"></label>
+          <label>DNS (Komma) <input type="text" name="dns"></label>
+          <label>Peer PublicKey <input type="text" name="publicKey" data-validate="key"></label>
+          <label>Endpoint (host:port) <input type="text" name="endpoint" data-validate="endpoint"></label>
+          <label>AllowedIPs (CIDR, Komma) <input type="text" name="allowedIPs" data-validate="cidrlist"></label>
+          <label>PersistentKeepalive <input type="number" name="persistentKeepalive" min="0"></label>
+          <div class="field-errors" id="form-errors"></div>
+          <button type="submit">Speichern</button>
+        </form>
+      </details>
+
+      <details class="accordion">
+        <summary>Bulk-Text (kompletter .conf-Inhalt)</summary>
+        <form id="bulk-form">
+          <label>Name <input type="text" name="name"></label>
+          <textarea name="text" rows="10" placeholder="[Interface]&#10;PrivateKey = ...&#10;Address = ...&#10;&#10;[Peer]&#10;PublicKey = ...&#10;Endpoint = host:port&#10;AllowedIPs = 0.0.0.0/0"></textarea>
+          <div class="field-errors" id="bulk-errors"></div>
+          <button type="submit">Speichern</button>
+        </form>
+      </details>
+    </section>
+
+    <!-- Schicht 2: Einstellungen -->
+    <section id="layer-settings" class="layer hidden" data-layer="settings">
+      <header class="hdr">
+        <button class="back" data-goto="home" type="button">&larr;</button>
+        <h1>Einstellungen</h1>
+      </header>
+
+      <label class="toggle"><input type="checkbox" id="set-autoconnect"><span>Auto-Connect</span></label>
+      <label class="row">Auto-Connect-Tunnel
+        <select id="set-autoconnect-tunnel"></select>
+      </label>
+      <label class="toggle"><input type="checkbox" id="set-killswitch"><span>Kill-Switch</span></label>
+
+      <label class="row">Benachrichtigungen
+        <input type="range" id="set-notify" min="0" max="4" step="1">
+        <span id="set-notify-label"></span>
+      </label>
+      <fieldset id="notify-types" class="hidden">
+        <legend>Manuelle Typen</legend>
+        <label class="toggle"><input type="checkbox" id="nt-status"><span>Status</span></label>
+        <label class="toggle"><input type="checkbox" id="nt-error"><span>Fehler</span></label>
+        <label class="toggle"><input type="checkbox" id="nt-killSwitch"><span>Kill-Switch</span></label>
+        <label class="toggle"><input type="checkbox" id="nt-autoConnect"><span>Auto-Connect</span></label>
+      </fieldset>
+
+      <label class="row">Logging
+        <input type="range" id="set-log" min="0" max="3" step="1">
+        <span id="set-log-label"></span>
+      </label>
+
+      <div class="row info">
+        <strong>DNS:</strong> <span id="dns-status">Remote-DNS erzwungen (gesperrt)</span>
+      </div>
+      <label class="toggle"><input type="checkbox" id="set-webrtc"><span>WebRTC deaktivieren</span></label>
+      <div id="webrtc-hint" class="hint"></div>
+    </section>
+  </div>
+
+  <script src="router.js"></script>
+  <script src="layer1-home.js"></script>
+  <script src="layer2-tunnel.js"></script>
+  <script src="layer3-manual.js"></script>
+  <script src="layer2-settings.js"></script>
+</body>
+</html>

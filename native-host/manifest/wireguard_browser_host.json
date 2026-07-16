@@ -1,0 +1,7 @@
+{
+  "name": "wireguard_browser_host",
+  "description": "WireGuard Browser Tunnel - Native Messaging Host",
+  "path": "__HOST_BINARY_PATH__",
+  "type": "stdio",
+  "allowed_extensions": ["wireguard-browser-tunnel@local"]
+}

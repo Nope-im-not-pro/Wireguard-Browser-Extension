@@ -1,0 +1,42 @@
+{
+  "manifest_version": 2,
+  "name": "WireGuard Browser Tunnel",
+  "version": "0.1.1",
+  "description": "Routet ausschliesslich Firefox-Traffic durch einen WireGuard-Tunnel (userspace SOCKS5 via Native-Host + wireproxy).",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "wireguard-browser-tunnel@local",
+      "strict_min_version": "115.0"
+    }
+  },
+  "permissions": [
+    "proxy",
+    "privacy",
+    "notifications",
+    "nativeMessaging",
+    "storage"
+  ],
+  "background": {
+    "scripts": [
+      "models/storage.js",
+      "models/tunnel.js",
+      "models/settings.js",
+      "services/logger.js",
+      "services/validation.js",
+      "services/conf-parser.js",
+      "services/native-client.js",
+      "services/proxy-control.js",
+      "services/privacy-control.js",
+      "services/notifications.js",
+      "controllers/message-router.js",
+      "controllers/tunnel-controller.js",
+      "controllers/settings-controller.js",
+      "controllers/connection-controller.js",
+      "background/background.js"
+    ]
+  },
+  "browser_action": {
+    "default_title": "WireGuard Browser Tunnel",
+    "default_popup": "view/popup.html"
+  }
+}

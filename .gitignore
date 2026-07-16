@@ -1,0 +1,26 @@
+﻿# lokale Ablage für alte/archivierte Dateien
+z_*
+
+# Test-Skripte → Windows
+*.ps1
+!install_windows.ps1
+
+# random Stuff
+web-ext-artifacts/
+*estore*py
+
+# Secrets
+*.env
+.env
+_secrets/
+*_token.json
+dist/signed/
+
+# Interne Doku und Dev-Steps: Konzepte, Umsetzungspläne, TODOs.
+# Nur zwingend öffentliche Markdown-Dateien ausgenommen
+*.md
+!CHANGELOG.md
+!README*.md
+!LICENSE.md
+!BLUEPRINT*.md
+
